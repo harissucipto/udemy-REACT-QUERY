@@ -30,5 +30,8 @@ export const queryClient = new QueryClient({
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
     },
+    mutations: {
+      onError: queryErrorHandler,
+    },
   },
 });
