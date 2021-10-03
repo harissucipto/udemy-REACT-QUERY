@@ -17,7 +17,6 @@ export function useTreatments(): Treatment[] {
   const fallback = [];
   const { data = fallback } = useQuery(queryKeys.treatments, getTreatments, {
     onError: (error) => {
-      console.log('error pak');
       // checking erro type
       const title =
         error instanceof Error
