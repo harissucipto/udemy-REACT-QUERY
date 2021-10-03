@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { GiPodiumSecond } from 'react-icons/gi';
 import { useQuery, useQueryClient } from 'react-query';
 
 import { axiosInstance } from '../../../axiosInstance';
@@ -33,6 +34,12 @@ interface UseAppointments {
   showAll: boolean;
   setShowAll: Dispatch<SetStateAction<boolean>>;
 }
+
+// common optons for userQuer and prefetchQuery
+const commonOptions = {
+  staleTime: 0, // 10 minutes
+  cacheTime: 300000, // 5 minutes
+};
 
 // The purpose of this hook:
 //   1. track the current month/year (aka monthYear) selected by the user
@@ -84,6 +91,9 @@ export function useAppointments(): UseAppointments {
     queryClient.prefetchQuery(
       [queryKeys.appointments, nextMonthYear.year, nextMonthYear.month],
       () => getAppointments(nextMonthYear.year, nextMonthYear.month),
+      {
+        ...commonOptions,
+      },
     );
   }, [queryClient, monthYear]);
 
@@ -99,6 +109,11 @@ export function useAppointments(): UseAppointments {
     () => getAppointments(monthYear.year, monthYear.month),
     {
       select: showAll ? undefined : selectFn,
+      ...commonOptions,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
+      refetchInterval: 60000, // every second not recomened for proudction
     },
   );
 
