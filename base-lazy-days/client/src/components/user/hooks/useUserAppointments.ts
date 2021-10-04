@@ -23,12 +23,12 @@ export function useUserAppointments(): Appointment[] {
 
   const fallback: Appointment[] = [];
   const { data: UserAppointments = fallback } = useQuery(
-    'user-appointments',
+    [queryKeys.appointments, queryKeys.user, user?.id],
     () => getUserAppointments(user),
     {
       enabled: !!user,
     },
   );
-  // TODO replace with React Query
-  return mockUserAppointments;
+
+  return UserAppointments;
 }
